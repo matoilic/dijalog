@@ -1,0 +1,174 @@
+@import "mixins";
+
+// Overlay/content animations
+
+@mixin keyframes-dijalog-fadein {
+    @include dijalog-keyframes("dijalog-fadein") {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+}
+
+@mixin keyframes-dijalog-fadeout {
+    @include dijalog-keyframes("dijalog-fadeout") {
+        0% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+}
+
+// Content animations
+
+@mixin keyframes-dijalog-flyin {
+    @include dijalog-keyframes("dijalog-flyin") {
+        0% {
+            opacity: 0;
+            @include dijalog-transform(translateY(-40px));
+        }
+        100% {
+            opacity: 1;
+            @include dijalog-transform(translateY(0));
+        }
+    }
+}
+
+@mixin keyframes-dijalog-flyout {
+    @include dijalog-keyframes("dijalog-flyout") {
+        0% {
+            opacity: 1;
+            @include dijalog-transform(translateY(0));
+        }
+        100% {
+            opacity: 0;
+            @include dijalog-transform(translateY(-40px));
+        }
+    }
+}
+
+@mixin keyframes-dijalog-dropin {
+    @include dijalog-keyframes("dijalog-dropin") {
+        0% {
+            @include dijalog-transform(translateY(0));
+            opacity: 0;
+        }
+        1% {
+            @include dijalog-transform(translateY(-800px));
+            opacity: 0;
+        }
+        // Real animation begins here
+        2% {
+            @include dijalog-transform(translateY(-800px));
+            opacity: 1;
+        }
+        100% {
+            @include dijalog-transform(translateY(0));
+            opacity: 1;
+        }
+    }
+}
+
+@mixin keyframes-dijalog-dropout {
+    @include dijalog-keyframes("dijalog-dropout") {
+        0% {
+            @include dijalog-transform(translateY(0));
+        }
+        100% {
+            @include dijalog-transform(translateY(-800px));
+        }
+    }
+}
+
+@mixin keyframes-dijalog-slideup {
+    @include dijalog-keyframes("dijalog-slideup") {
+        0% {
+            @include dijalog-transform(translateY(0));
+            opacity: 0;
+        }
+        1% {
+            @include dijalog-transform(translateY(800px));
+            opacity: 0;
+        }
+        // Real animation begins here
+        2% {
+            @include dijalog-transform(translateY(800px));
+            opacity: 1;
+        }
+        100% {
+            @include dijalog-transform(translateY(0));
+            opacity: 1;
+        }
+    }
+}
+
+@mixin keyframes-dijalog-slidedown {
+    @include dijalog-keyframes("dijalog-slidedown") {
+        0% {
+            @include dijalog-transform(translateY(0));
+        }
+        100% {
+            @include dijalog-transform(translateY(800px));
+        }
+    }
+}
+
+@mixin keyframes-dijalog-flipin-horizontal {
+    @include dijalog-keyframes("dijalog-flipin-horizontal") {
+        0% {
+            opacity: 0;
+            @include dijalog-transform(rotateY(-90deg));
+        }
+        100% {
+            opacity: 1;
+            @include dijalog-transform(rotateY(0deg));
+        }
+    }
+}
+
+@mixin keyframes-dijalog-flipout-horizontal {
+    @include dijalog-keyframes("dijalog-flipout-horizontal") {
+        0% {
+            opacity: 1;
+            @include dijalog-transform(rotateY(0deg));
+        }
+        100% {
+            opacity: 0;
+            @include dijalog-transform(rotateY(90deg));
+        }
+    }
+}
+
+// Spinner animations
+
+@mixin keyframes-dijalog-rotation {
+    @include dijalog-keyframes("dijalog-rotation") {
+        0% {
+            @include dijalog-transform(rotate(0deg));
+        }
+        100% {
+            @include dijalog-transform(rotate(359deg));
+        }
+    }
+}
+
+// Button animations
+
+@mixin keyframes-dijalog-pulse {
+    @include dijalog-keyframes("dijalog-pulse") {
+        0% {
+            @include box-shadow(inset 0 0 0 300px transparent);
+        }
+        70% {
+            @include box-shadow(inset 0 0 0 300px rgba(255, 255, 255, 0.25));
+        }
+        100% {
+            @include box-shadow(inset 0 0 0 300px transparent);
+        }
+    }
+}

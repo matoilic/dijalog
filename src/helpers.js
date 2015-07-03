@@ -30,7 +30,7 @@ var assign = Object.assign ? Object.assign : function(target) {
     return to;
 };
 
-var createElement = document.createElement;
+var createElement = document.createElement.bind(document);
 
 function css(elem, styles) {
     Object.keys(styles).forEach(function(key) {
@@ -38,35 +38,44 @@ function css(elem, styles) {
     });
 }
 
-function addClass(elem, classes) {
+function updateClass(elem, classes, operation) {
     classes = classes.trim();
 
     if(classes.length) {
-        elem.classList.add.apply(
+        elem.classList[operation].apply(
             elem.classList,
             classes.split(/\s+/)
         );
     }
 }
 
+function addClass(elem, classes) {
+    updateClass(elem, classes, 'add');
+}
+
+function removeClass(elem, classes) {
+    updateClass(elem, classes, 'remove');
+}
+
 function append(elem, content) {
-    var fragment;
+    var wrapper;
 
     if(content.trim) {
-        fragment = document.createDocumentFragment();
-        fragment.textContent = content;
-    } else {
-        fragment = content;
-    }
+        wrapper = createElement('div');
+        wrapper.innerHTML = content;
 
-    elem.appendChild(fragment);
+        for(var i = 0, n = wrapper.childNodes.length; i < n; i++) {
+            elem.appendChild(wrapper.childNodes[i]);
+        }
+    } else {
+        elem.appendChild(content)
+    }
 }
 
 function serializeForm(form) {
     var isSubmittable = /^(?:input|select|textarea|keygen)/i;
     var isSubmitter = /^(?:submit|button|image|reset|file)/i;
     var isCheckable = /^(?:checkbox|radio)/i;
-    var isCheckbox = /^checkbox/i;
     var brackets = /\[\]/;
     var newLine = /\r?\n/g;
 
@@ -82,34 +91,52 @@ function serializeForm(form) {
         })
         .map(function(elem) {
             return {
-                name: elem.name,
+                name: elem.name.replace(brackets, ''),
                 value: elem.value.replace(newLine, '\r\n'),
-                isCheckbox: isCheckbox.test(elem.type)
+                isArray: brackets.test(elem.name)
             };
         })
         .reduce(function(formValues, elem) {
-            var name = elem.name.replace(brackets, '');
-
-            if(!formValues[name] && elem.isCheckbox) {
-                formValues[name] = [];
+            if(!formValues[elem.name] && elem.isArray) {
+                formValues[elem.name] = [];
             }
 
-            if(elem.isCheckbox) {
-                formValues[name].push(elem.value);
+            if(elem.isArray) {
+                formValues[elem.name].push(elem.value);
             } else {
-                formValues[name] = elem.value;
+                formValues[elem.name] = elem.value;
             }
 
             return formValues;
         }, {})
 }
 
-function on(elem, event, callback) {
-    elem.addEventListener(event, callback);
+function on(elem, events, callback) {
+    events.split(' ').forEach(function(event) {
+        elem.addEventListener(event, callback);
+    });
 }
 
-function off(elem, event, callback) {
-    elem.removeEventListener(event, callback);
+function off(elem, events, callback) {
+    events.split(' ').forEach(function(event) {
+        elem.removeEventListener(event, callback);
+    });
+}
+
+function once(elem, events, callback) {
+    events = events.split(' ');
+
+    var func = function() {
+        events.forEach(function(event) {
+            elem.removeEventListener(event, func);
+        });
+
+        callback();
+    };
+
+    events.forEach(function(event) {
+        elem.addEventListener(event, func);
+    });
 }
 
 function trigger(elem, event, data) {
@@ -120,4 +147,8 @@ function trigger(elem, event, data) {
     });
 
     elem.dispatchEvent(event);
+}
+
+function last(arr) {
+    return arr[arr.length - 1];
 }

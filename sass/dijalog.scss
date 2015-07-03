@@ -1,0 +1,105 @@
+@import "mixins";
+@import "keyframes";
+
+@include keyframes-dijalog-fadein;
+
+@include keyframes-dijalog-fadeout;
+
+@include keyframes-dijalog-rotation;
+
+.dijalog, 
+.dijalog *, 
+.dijalog *:before, 
+.dijalog *:after {
+    @include box-sizing(border-box);
+}
+
+.dijalog {
+    position: fixed;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 1111;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.dijalog-scrollbar-measure {
+    position: absolute;
+    top: -9999px;
+    width: 50px;
+    height: 50px;
+    overflow: scroll;
+}
+
+.dijalog-overlay {
+    @include dijalog-animation(dijalog-fadein 0.5s);
+    
+    position: fixed;
+    background: rgba(0, 0, 0, 0.4);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    
+    .dijalog.dijalog-closing & {
+        @include dijalog-animation(dijalog-fadeout 0.5s);
+    }
+}
+
+.dijalog-content {
+    background: white;
+    
+    .dijalog.dijalog-closing &,
+    .dijalog.dijalog-hiding & {
+        @include dijalog-animation(dijalog-fadeout 0.5s);
+    }
+
+    &.dijalog-hidden {
+        display: none;
+    }
+
+    &.dijalog-visible {
+        @include dijalog-animation(dijalog-fadein 0.5s);
+    }
+}
+
+.dijalog-close:before {
+    font-family: Arial, sans-serif;
+    content: "\00D7";
+}
+
+.dijalog-dialog-form {
+    margin: 0;
+}
+
+.dijalog-dialog-button {
+    @include appearance(none);
+
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+}
+
+.dijalog-loading-spinner {
+    @include box-shadow(0 0 1em rgba(0, 0, 0, 0.1));
+    @include dijalog-animation(dijalog-rotation 0.7s linear infinite);
+    
+    position: fixed;
+    z-index: 1112;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2em;
+    width: 2em;
+    background: white;
+}
+
+// Prevent background scrolling when vex is open
+// https://github.com/HubSpot/vex/issues/18
+body.dijalog-open {
+    overflow: hidden;
+}

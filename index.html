@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Dijalog</title>
+        <link href="css/dijalog.css" rel="stylesheet">
+        <link href="css/dijalog-theme-default.css" rel="stylesheet">
+    </head>
+    <body>
+        <button id="open">open</button>
+        <script src="dist/dijalog.js"></script>
+        <script>
+            document
+                    .getElementById('open')
+                    .addEventListener('click', function() {
+                        dijalog.open({
+                            content: '<p>Hello world</p>'
+                        });
+
+                        setTimeout(function() {
+                            dijalog.open({
+                                content: '<p>Hello world 2</p>'
+                            });
+                        }, 1000);
+                    });
+        </script>
+    </body>
+</html>

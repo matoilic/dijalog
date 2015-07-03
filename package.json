@@ -1,0 +1,33 @@
+{
+  "name": "dijalog",
+  "version": "0.1.0",
+  "description": "Simple dialogs in JavaScript",
+  "main": "dist/dijalog.min.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matoilic/dijalog.git"
+  },
+  "keywords": [
+    "dialog",
+    "lightbox",
+    "overlay"
+  ],
+  "author": "Mato Ilic (info@matoilic.ch)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/matoilic/dijalog/issues"
+  },
+  "homepage": "https://github.com/matoilic/dijalog#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-connect": "^2.2.0",
+    "gulp-load-plugins": "^0.10.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-sass": "^2.0.3",
+    "gulp-sourcemaps": "^1.5.2"
+  }
+}
