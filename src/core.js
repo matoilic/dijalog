@@ -1,10 +1,7 @@
 function dijalogFactory() {
     var wrapper;
-    var noop = function() { };
 
     var dijalog = {
-        globalId: 1,
-
         dialogs: [],
 
         overlay: null,
@@ -41,6 +38,58 @@ function dijalogFactory() {
             afterClose: noop
         },
 
+        defaultDialogOptions: {
+            callback: noop,
+            afterOpen: noop,
+            message: 'Message',
+            input: '<input name="dijalog" type="hidden" value="_dijalog-empty-value">',
+            value: false,
+            buttons: [
+                {
+                    text: 'OK',
+                    type: 'submit',
+                    className: 'dijalog-button-primary'
+                },
+                {
+                    text: 'Cancel',
+                    type: 'button',
+                    className: 'dijalog-button-secondary',
+                    click: function() {
+                        var dialog = dijalog.findParentDialog(this);
+                        dijalog.close(dialog.id);
+                    }
+                }
+            ],
+            showCloseButton: false,
+            onSubmit: function(event) {
+                var dialog = dijalog.findParentDialog(this);
+                var form = dialog.contentElement.querySelector('form');
+
+                event.preventDefault();
+                event.stopPropagation();
+                dialog.value = dijalog.getFormValueOnSubmit(serializeForm(form));
+
+                dijalog.close(dialog.id);
+            },
+            focusFirstInput: true
+        },
+
+        defaultAlertOptions: {
+            message: 'Alert',
+            buttons: [
+                {
+                    text: 'OK',
+                    type: 'submit',
+                    className: 'dijalog-button-primary'
+                }
+            ],
+            focusFirstInput: false
+        },
+
+        defaultConfirmOptions: {
+            message: 'Confirm'
+        },
+
         _close: function(dialog) {
             var content = dialog.contentElement;
 
@@ -64,7 +113,7 @@ function dijalogFactory() {
 
             var dialog = dijalog.get(id, true);
 
-            if(dialog.beforeClose() !== false) {
+            if(dialog.beforeClose(dialog) !== false) {
                 once(wrapper, dijalog.animationEndEvent, dijalog._close.bind(this, dialog));
 
                 if(dijalog.dialogs.length) {
@@ -153,21 +202,21 @@ function dijalogFactory() {
                 append(options.appendLocation, wrapper);
             }
 
+            options.contentElement = content;
+            options.id = dijalog.dialogs.length;
+            dijalog.dialogs.push(options);
+
             if (options.afterOpen) {
-                options.afterOpen(content, options);
+                options.afterOpen(options);
             }
 
             setTimeout(function() {
                 trigger(content, 'dijalogopen', options);
             }, 0);
-
-            options.contentElement = content;
-            dijalog.dialogs.push(options);
         },
         
         open: function(options) {
             options = assign({}, dijalog.defaultOptions, options);
-            options.id = dijalog.globalId++;
 
             if(!wrapper) {
                 wrapper = createElement('div');
@@ -207,6 +256,145 @@ function dijalogFactory() {
                     document.body.classList.remove(dijalog.baseClassNames.open);
                 }
             });
+        },
+
+        findParentDialog: function(element) {
+            while(element !== document.body) {
+                if(element.classList.contains(dijalog.baseClassNames.content)) {
+                    return dijalog.dialogs.filter(function(dialog) {
+                        return dialog.contentElement === element;
+                    })[0];
+                }
+
+                element = element.parentNode;
+            }
+
+            return null;
+        },
+
+        openDialog: function(options) {
+            var beforeClose = options.beforeClose;
+            var afterOpen = options.afterOpen;
+
+            options = assign({}, dijalog.defaultOptions, dijalog.defaultDialogOptions, options);
+            options.content = dijalog.buildDialogForm(options);
+
+            options.beforeClose = function(dialog) {
+                options.callback(dialog.value);
+
+                if (beforeClose) {
+                    beforeClose(dialog);
+                }
+            };
+
+            if(options.focusFirstInput) {
+                options.afterOpen = function(dialog) {
+                    dialog.contentElement
+                        .querySelector('button[type="submit"], button[type="button"], input[type="submit"], input[type="button"], textarea, input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"]')
+                        .focus();
+
+                    if (afterOpen) {
+                        afterOpen(dialog);
+                    }
+                };
+            }
+
+            dijalog.open(options);
+        },
+
+        alert: function(options) {
+            if(typeof options === 'string') {
+                options = {message: options};
+            }
+
+            options = assign({}, dijalog.defaultAlertOptions, options);
+
+            dijalog.openDialog(options);
+        },
+
+        confirm: function(options) {
+            if(typeof options === 'string') {
+                throw new Error('dijalog.confirm(options) requires options.callback.');
+            }
+
+            options = assign({}, dijalog.defaultConfirmOptions, options);
+
+            dijalog.openDialog(options);
+        },
+
+        prompt: function(options) {
+            if(typeof options === 'string') {
+                throw new Error('dijalog.prompt(options) requires options.callback.');
+            }
+
+            var defaultOptions = {
+                message: '<label for="dijalog">' + (options.label || 'Prompt:' ) + '</label>',
+                input: '<input '+
+                'name="dijalog" ' +
+                'type="text" ' +
+                'class="dijalog-prompt-input" ' +
+                'placeholder="' + (options.placeholder || '') + '" ' +
+                'value="' + (options.value || '') + '" />'
+            };
+
+            options = assign({}, defaultOptions, options);
+
+            dijalog.openDialog(options);
+        },
+
+        buildDialogButtons: function(buttons) {
+            var container = createElement('div');
+
+            addClass(container, 'dijalog-buttons');
+
+            buttons.forEach(function(options) {
+                var button = createElement('button');
+
+                button.setAttribute('type', options.type);
+                button.innerHTML = options.text;
+                addClass(button, 'dijalog-button');
+                addClass(button, options.className);
+
+                if(options.click) {
+                    on(button, 'click', function(event) {
+                        options.click.call(this, event, dijalog.findParentDialog(this));
+                    });
+                }
+
+                append(container, button);
+            });
+
+            return container;
+        },
+
+        buildDialogForm: function(options) {
+            var form = createElement('form');
+            addClass(form, 'dijalog-form');
+            on(form, 'submit', options.onSubmit);
+
+            var message = createElement('div');
+            message.innerHTML = options.message;
+            addClass(message, 'dijalog-message');
+            append(form, message);
+
+            if(options.input) {
+                var input = createElement('div');
+                addClass(input, 'dijalog-input');
+                append(input, options.input);
+                append(form, input);
+            }
+
+            append(form, dijalog.buildDialogButtons(options.buttons));
+
+            return form;
+        },
+
+        getFormValueOnSubmit: function(formData) {
+            if(formData.dijalog) {
+                return formData.dijalog === '_dijalog-empty-value' ? true : formData.dijalog;
+            }
+
+            return formData;
         }
     };
 

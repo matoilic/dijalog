@@ -79,12 +79,12 @@ $blue: #3288e6;
             background: #e0e0e0;
         }
     }
-    .dijalog-dialog-form {
-        .dijalog-dialog-message {
+    .dijalog-form {
+        .dijalog-message {
             margin-bottom: 0.5em;
         }
 
-        .dijalog-dialog-input {
+        .dijalog-input {
             margin-bottom: 1em;
 
             textarea,
@@ -120,11 +120,11 @@ $blue: #3288e6;
             }
         }
 
-        .dijalog-dialog-buttons {
+        .dijalog-buttons {
             @include pie-clearfix;
         }
     }
-    .dijalog-dialog-button {
+    .dijalog-button {
         @include border-radius(3px);
 
         border: 0;
@@ -153,12 +153,12 @@ $blue: #3288e6;
             }
         }
 
-        &.dijalog-dialog-button-primary {
+        &.dijalog-button-primary {
             background: $blue;
             color: white;
         }
 
-        &.dijalog-dialog-button-secondary {
+        &.dijalog-button-secondary {
             background: #e0e0e0;
             color: #777777;
         }

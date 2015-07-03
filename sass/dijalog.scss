@@ -70,11 +70,11 @@
     content: "\00D7";
 }
 
-.dijalog-dialog-form {
+.dijalog-form {
     margin: 0;
 }
 
-.dijalog-dialog-button {
+.dijalog-button {
     @include appearance(none);
 
     cursor: pointer;

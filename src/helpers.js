@@ -79,7 +79,7 @@ function serializeForm(form) {
     var brackets = /\[\]/;
     var newLine = /\r?\n/g;
 
-    return form.elements
+    return Array.prototype.slice.apply(form.elements)
         .filter(function(elem) {
             return (
                 elem.name &&
@@ -152,3 +152,5 @@ function trigger(elem, event, data) {
 function last(arr) {
     return arr[arr.length - 1];
 }
+
+function noop() { }

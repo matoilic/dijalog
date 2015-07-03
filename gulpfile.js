@@ -24,7 +24,31 @@ gulp.task('compile', function() {
         .pipe(g.sourcemaps.init())
         .pipe(g.concat('dijalog.js'))
         .pipe(g.sourcemaps.write('.'))
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('compress', function() {
+    return gulp
+        .src('dist/dijalog.min.js')
+        .pipe(g.gzip({
+            append: true
+        }))
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('minify', function() {
+    return gulp
+        .src('dist/dijalog.js')
+        .pipe(g.sourcemaps.init())
+        .pipe(g.uglify({
+            drop_debugger: true,
+            drop_console: true
+        }))
+        .pipe(g.rename({
+            suffix: ".min"
+        }))
+        .pipe(g.sourcemaps.write('.'))
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch', ['compile'], function() {
@@ -40,3 +64,4 @@ gulp.task('serve', ['default'], function(){
 });
 
 gulp.task('default', ['compile', 'compile-stylesheets']);
+gulp.task('dist', ['compile', 'compile-stylesheets', 'minify', 'compress']);
