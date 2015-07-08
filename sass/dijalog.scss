@@ -11,7 +11,7 @@
 .dijalog *, 
 .dijalog *:before, 
 .dijalog *:after {
-    @include box-sizing(border-box);
+    box-sizing: border-box;
 }
 
 .dijalog {
@@ -34,8 +34,7 @@
 }
 
 .dijalog-overlay {
-    @include dijalog-animation(dijalog-fadein 0.5s);
-    
+    animation: dijalog-fadein 0.5s;
     position: fixed;
     background: rgba(0, 0, 0, 0.4);
     top: 0;
@@ -44,7 +43,7 @@
     left: 0;
     
     .dijalog.dijalog-closing & {
-        @include dijalog-animation(dijalog-fadeout 0.5s);
+        animation: dijalog-fadeout 0.5s;
     }
 }
 
@@ -53,7 +52,7 @@
     
     .dijalog.dijalog-closing &,
     .dijalog.dijalog-hiding & {
-        @include dijalog-animation(dijalog-fadeout 0.5s);
+        animation: dijalog-fadeout 0.5s;
     }
 
     &.dijalog-hidden {
@@ -61,7 +60,7 @@
     }
 
     &.dijalog-visible {
-        @include dijalog-animation(dijalog-fadein 0.5s);
+        animation: dijalog-fadein 0.5s;
     }
 }
 
@@ -75,27 +74,46 @@
 }
 
 .dijalog-button {
-    @include appearance(none);
-
+    appearance: none;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     text-rendering: optimizeLegibility;
 }
 
-.dijalog-loading-spinner {
-    @include box-shadow(0 0 1em rgba(0, 0, 0, 0.1));
-    @include dijalog-animation(dijalog-rotation 0.7s linear infinite);
-    
-    position: fixed;
-    z-index: 1112;
-    margin: auto;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 2em;
-    width: 2em;
-    background: white;
+.dijalog-spinner {
+    @include dijalog-circle(#000, 11em);
+
+    animation: dijalog-rotation 1.8s infinite linear;
+    border-left-color: transparent;
+    margin: 50px auto;
+    position: relative;
+    will-change: transform;
+
+    &:before {
+        @include dijalog-circle(#000, 9em);
+
+        animation: dijalog-rotation 1.8s infinite linear;
+        border-bottom-color: transparent;
+        content: "";
+        left: 1em;
+        position: absolute;
+        top: 1em;
+    }
+
+    &:after {
+        @include dijalog-circle(#000, 7em);
+
+        animation: dijalog-rotation 1.8s infinite linear;
+        border-right-color: transparent;
+        content: "";
+        left: 2em;
+        position: absolute;
+        top: 2em;
+    }
+}
+
+.dijalog-spinner-overlay {
+
 }
 
 // Prevent background scrolling when vex is open

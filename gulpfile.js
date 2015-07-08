@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var g = require('gulp-load-plugins')(gulp);
+var bs = require('./test/config/browserstack.js');
 
 gulp.task('compile-stylesheets', function() {
     return gulp
@@ -9,6 +10,7 @@ gulp.task('compile-stylesheets', function() {
         .pipe(g.sass({
             outputStyle: 'expanded'
         }))
+        .pipe(g.autoprefixer())
         .pipe(g.sourcemaps.write('.'))
         .pipe(gulp.dest('css'));
 });
@@ -59,9 +61,40 @@ gulp.task('watch', ['compile'], function() {
 gulp.task('serve', ['default'], function(){
     g.connect.server({
         port: 8088,
-        root: ['.']
+        root: ['test', '.']
     });
 });
 
-gulp.task('default', ['compile', 'compile-stylesheets']);
+gulp.task('webdriver-update', g.protractor.webdriver_update);
+
+gulp.task('webdriver-standalone', g.protractor.webdriver_standalone);
+
+gulp.task('test', ['webdriver-update', 'build'], function(done) {
+    var remote = process.argv.indexOf('--remote') > -1;
+
+    g.connect.server({
+        port: 8089,
+        root: ['test', '.']
+    });
+
+    gulp
+        .src('./test/*-test.js')
+        .pipe(g.protractor.protractor({
+            configFile: remote ? './test/config/protractor-browserstack-config.js' : './test/config/protractor-config.js'
+        }))
+        .on('error', function (err) {
+            g.connect.serverClose();
+
+            throw err;
+        })
+        .on('end', function () {
+            g.connect.serverClose();
+
+            done();
+        });
+
+});
+
+gulp.task('build', ['compile', 'compile-stylesheets']);
 gulp.task('dist', ['compile', 'compile-stylesheets', 'minify', 'compress']);
+gulp.task('default', ['build']);
