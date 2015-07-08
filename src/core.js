@@ -1,7 +1,22 @@
+/* global noop */
+/* global on */
+/* global once */
+/* global addClass */
+/* global removeClass */
+/* global append */
+/* global assign */
+/* global trigger */
+/* global serializeForm */
+/* global last */
+/* global css */
+/* global createElement */
+/* global define */
+
 function dijalogFactory() {
     var wrapper;
     var body = document.body;
     var spinner;
+    var currentDijalog;
 
     var dijalog = {
         dialogs: [],
@@ -124,6 +139,10 @@ function dijalogFactory() {
                 }
 
                 removeClass(dialog.contentElement, dijalog.baseClassNames.visible);
+
+                if(currentDijalog === dialog) {
+                    currentDijalog = null;
+                }
             }
 
             return true;
@@ -151,6 +170,10 @@ function dijalogFactory() {
             if(!dijalog.dialogs.length) return false;
 
             var dialog = dijalog.get(id);
+
+            if(currentDijalog === dialog) {
+                currentDijalog = null;
+            }
 
             once(wrapper, dijalog.animationEndEvent, dijalog._hide.bind(this, dialog));
             addClass(wrapper, dijalog.baseClassNames.hiding);
@@ -182,13 +205,11 @@ function dijalogFactory() {
                 addClass(overlay, options.overlayClassName);
                 css(overlay, options.overlayCSS);
 
-                if (options.overlayClosesOnClick) {
-                    on(overlay, 'click', function(event) {
-                        if (event.target === overlay) {
-                            dijalog.close(options.id);
-                        }
-                    });
-                }
+                on(overlay, 'click', function(event) {
+                    if (currentDijalog && currentDijalog.overlayClosesOnClick && event.target === overlay) {
+                        dijalog.close(options.id);
+                    }
+                });
 
                 append(wrapper, overlay);
                 append(options.appendLocation, wrapper);
@@ -208,6 +229,8 @@ function dijalogFactory() {
             var dialog = dijalog.get(id);
             removeClass(dialog.contentElement, dijalog.baseClassNames.hidden);
             addClass(dialog.contentElement, dijalog.baseClassNames.visible);
+
+            currentDijalog = dialog;
         },
 
         showLoading: function(withOverlay, options) {
@@ -253,6 +276,8 @@ function dijalogFactory() {
             options.id = dijalog.dialogs.length;
             dijalog.dialogs.push(options);
 
+            currentDijalog = options;
+
             if (options.afterOpen) {
                 options.afterOpen(options);
             }
@@ -261,7 +286,7 @@ function dijalogFactory() {
                 trigger(content, 'dijalogopen', options);
             }, 0);
         },
-        
+
         open: function(options) {
             options = assign({}, dijalog.defaultOptions, options);
 
@@ -270,7 +295,7 @@ function dijalogFactory() {
                 this._open(options);
             } else {
                 dijalog.hide();
-                once(wrapper, 'dijaloghidden', dijalog._open.bind(dijalog, options))
+                once(wrapper, 'dijaloghidden', dijalog._open.bind(dijalog, options));
             }
         },
 
@@ -287,11 +312,13 @@ function dijalogFactory() {
         },
 
         findParentDialog: function(element) {
+            var filter = function(dialog) {
+                return dialog.contentElement === element;
+            };
+
             while(element !== body) {
                 if(element.classList.contains(dijalog.baseClassNames.content)) {
-                    return dijalog.dialogs.filter(function(dialog) {
-                        return dialog.contentElement === element;
-                    })[0];
+                    return dijalog.dialogs.filter(filter)[0];
                 }
 
                 element = element.parentNode;
@@ -318,7 +345,25 @@ function dijalogFactory() {
             if(options.focusFirstInput) {
                 options.afterOpen = function(dialog) {
                     dialog.contentElement
-                        .querySelector('button[type="submit"], button[type="button"], input[type="submit"], input[type="button"], textarea, input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="search"], input[type="tel"], input[type="text"], input[type="time"], input[type="url"], input[type="week"]')
+                        .querySelector(
+                            'button[type="submit"], ' +
+                            'button[type="button"], ' +
+                            'input[type="submit"], ' +
+                            'input[type="button"], ' +
+                            'textarea, input[type="date"], ' +
+                            'input[type="datetime"], ' +
+                            'input[type="datetime-local"], ' +
+                            'input[type="email"], ' +
+                            'input[type="month"], ' +
+                            'input[type="number"], ' +
+                            'input[type="password"], ' +
+                            'input[type="search"], ' +
+                            'input[type="tel"], ' +
+                            'input[type="text"], ' +
+                            'input[type="time"], ' +
+                            'input[type="url"], ' +
+                            'input[type="week"]'
+                        )
                         .focus();
 
                     if (afterOpen) {
@@ -356,8 +401,8 @@ function dijalogFactory() {
             }
 
             var defaultOptions = {
-                message: '<label for="dijalog">' + (options.label || 'Prompt:' ) + '</label>',
-                input: '<input '+
+                message: '<label for="dijalog">' + (options.label || 'Prompt:') + '</label>',
+                input: '<input ' +
                 'name="dijalog" ' +
                 'type="text" ' +
                 'class="dijalog-prompt-input" ' +
@@ -431,7 +476,7 @@ function dijalogFactory() {
     dijalog.setupBodyClassName();
 
     window.addEventListener('keyup', function(event) {
-        if (event.keyCode === 27) {
+        if (currentDijalog && currentDijalog.escapeButtonCloses && event.keyCode === 27) {
             dijalog.close();
         }
     });
