@@ -1,6 +1,4 @@
 var assign = Object.assign ? Object.assign : function(target) {
-    'use strict';
-
     if (target === undefined || target === null) {
         throw new TypeError('Cannot convert first argument to object');
     }
@@ -17,6 +15,7 @@ var assign = Object.assign ? Object.assign : function(target) {
         nextSource = Object(nextSource);
 
         var keysArray = Object.keys(Object(nextSource));
+
         for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
             var nextKey = keysArray[nextIndex];
             var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
@@ -68,7 +67,7 @@ function append(elem, content) {
             elem.appendChild(wrapper.childNodes[i]);
         }
     } else {
-        elem.appendChild(content)
+        elem.appendChild(content);
     }
 }
 
@@ -108,18 +107,12 @@ function serializeForm(form) {
             }
 
             return formValues;
-        }, {})
+        }, {});
 }
 
 function on(elem, events, callback) {
     events.split(' ').forEach(function(event) {
         elem.addEventListener(event, callback);
-    });
-}
-
-function off(elem, events, callback) {
-    events.split(' ').forEach(function(event) {
-        elem.removeEventListener(event, callback);
     });
 }
 
