@@ -1,5 +1,7 @@
 function dijalogFactory() {
     var wrapper;
+    var body = document.body;
+    var spinner;
 
     var dijalog = {
         dialogs: [],
@@ -25,7 +27,7 @@ function dijalogFactory() {
             showCloseButton: true,
             escapeButtonCloses: true,
             overlayClosesOnClick: true,
-            appendLocation: document.body,
+            appendLocation: body,
             className: 'dijalog-theme-default',
             css: {},
             overlayClassName: '',
@@ -97,14 +99,13 @@ function dijalogFactory() {
             content.parentNode.removeChild(content);
 
             if(!dijalog.dialogs.length) {
-                wrapper.parentNode.removeChild(wrapper);
-                wrapper = null;
+                this._hideOverlay();
             } else {
                 removeClass(wrapper, dijalog.baseClassNames.hiding);
                 dijalog.show();
             }
 
-            trigger(document.body, 'dijalogafterclose');
+            trigger(body, 'dijalogafterclose');
             dialog.afterClose();
         },
 
@@ -157,7 +158,48 @@ function dijalogFactory() {
         },
 
         hideLoading: function() {
-            //TODO
+            if(spinner) {
+                spinner.parentNode.removeChild(spinner);
+                spinner = null;
+            }
+
+            if(!dijalog.dialogs.length) {
+                this._hideOverlay();
+            }
+        },
+
+        _showOverlay: function(options) {
+            var overlay;
+
+            if(!wrapper) {
+                wrapper = createElement('div');
+                addClass(wrapper, dijalog.baseClassNames.dijalog);
+                addClass(wrapper, options.className);
+                css(wrapper, options.css);
+
+                overlay = createElement('div');
+                addClass(overlay, dijalog.baseClassNames.overlay);
+                addClass(overlay, options.overlayClassName);
+                css(overlay, options.overlayCSS);
+
+                if (options.overlayClosesOnClick) {
+                    on(overlay, 'click', function(event) {
+                        if (event.target === overlay) {
+                            dijalog.close(options.id);
+                        }
+                    });
+                }
+
+                append(wrapper, overlay);
+                append(options.appendLocation, wrapper);
+            }
+        },
+
+        _hideOverlay: function() {
+            if(wrapper) {
+                wrapper.parentNode.removeChild(wrapper);
+                wrapper = null;
+            }
         },
 
         show: function(id) {
@@ -168,12 +210,21 @@ function dijalogFactory() {
             addClass(dialog.contentElement, dijalog.baseClassNames.visible);
         },
 
-        showLoading: function() {
-            //TODO
+        showLoading: function(withOverlay, options) {
+            if(withOverlay) {
+                options = assign({}, dijalog.defaultOptions, options);
+                this._showOverlay(options);
+            }
+
+            if(!spinner) {
+                spinner = createElement('div');
+                addClass(spinner, 'dijalog-spinner');
+                addClass(spinner, dijalog.defaultOptions.className);
+                append(withOverlay ? wrapper : dijalog.defaultOptions.appendLocation, spinner);
+            }
         },
 
         _open: function(options) {
-            var overlay;
             var content;
             var closeButton;
 
@@ -198,10 +249,6 @@ function dijalogFactory() {
                 append(content, closeButton);
             }
 
-            if(!dijalog.dialogs.length) {
-                append(options.appendLocation, wrapper);
-            }
-
             options.contentElement = content;
             options.id = dijalog.dialogs.length;
             dijalog.dialogs.push(options);
@@ -219,27 +266,8 @@ function dijalogFactory() {
             options = assign({}, dijalog.defaultOptions, options);
 
             if(!wrapper) {
-                wrapper = createElement('div');
-                addClass(wrapper, dijalog.baseClassNames.dijalog);
-                addClass(wrapper, options.className);
-                css(wrapper, options.css);
-
-                overlay = createElement('div');
-                addClass(overlay, dijalog.baseClassNames.overlay);
-                addClass(overlay, options.overlayClassName);
-                css(overlay, options.overlayCSS);
-
-                if (options.overlayClosesOnClick) {
-                    on(overlay, 'click', function(event) {
-                        if (event.target === overlay) {
-                            dijalog.close(options.id);
-                        }
-                    });
-                }
-
-                append(wrapper, overlay);
-
-                this._open(options)
+                this._showOverlay(options);
+                this._open(options);
             } else {
                 dijalog.hide();
                 once(wrapper, 'dijaloghidden', dijalog._open.bind(dijalog, options))
@@ -248,18 +276,18 @@ function dijalogFactory() {
 
         setupBodyClassName: function() {
             on(document, 'dijalogopen', function() {
-                document.body.classList.add(dijalog.baseClassNames.open);
+                addClass(body, dijalog.baseClassNames.open);
             });
 
             on(document, 'dijalogclose', function() {
                 if (!dijalog.dialogs.length) {
-                    document.body.classList.remove(dijalog.baseClassNames.open);
+                    removeClass(body, dijalog.baseClassNames.open);
                 }
             });
         },
 
         findParentDialog: function(element) {
-            while(element !== document.body) {
+            while(element !== body) {
                 if(element.classList.contains(dijalog.baseClassNames.content)) {
                     return dijalog.dialogs.filter(function(dialog) {
                         return dialog.contentElement === element;
@@ -384,7 +412,9 @@ function dijalogFactory() {
                 append(form, input);
             }
 
-            append(form, dijalog.buildDialogButtons(options.buttons));
+            if(options.buttons !== null) {
+                append(form, dijalog.buildDialogButtons(options.buttons));
+            }
 
             return form;
         },
