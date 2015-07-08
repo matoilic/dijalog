@@ -1,5 +1,7 @@
 var gulp = require('gulp');
 var g = require('gulp-load-plugins')(gulp);
+var jscs = require('gulp-jscs-with-reporter');
+var fs = require('fs');
 var bs = require('./test/config/browserstack.js');
 
 gulp.task('compile-stylesheets', function() {
@@ -93,6 +95,24 @@ gulp.task('test', ['webdriver-update', 'build'], function(done) {
             done();
         });
 
+});
+
+gulp.task('jshint', function () {
+    return gulp.src('src/**/*.js')
+        .pipe(g.jshint('.jshintrc'))
+        .pipe(g.jshint.reporter('gulp-jshint-html-reporter', {
+            filename: __dirname + '/dist/jshint.html'
+        }));
+});
+
+gulp.task('jscs', function () {
+    return gulp.src('src/**/*.js')
+        .pipe(jscs(
+            JSON.parse(fs.readFileSync('.jscsrc'))
+        ))
+        .pipe(jscs.reporter('gulp-jscs-html-reporter', {
+            filename: __dirname + '/dist/jscs.html'
+        }))
 });
 
 gulp.task('build', ['compile', 'compile-stylesheets']);
