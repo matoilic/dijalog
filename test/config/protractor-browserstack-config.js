@@ -26,7 +26,7 @@ config.multiCapabilities = [
         browserVersion: '11.0',
         os: 'Windows',
         osVersion: '8.1'
-    })/*,
+    }),
     capabilitiesForBrowserStack({
         browser: 'Chrome',
         browserVersion: '39.0',
@@ -98,7 +98,7 @@ config.multiCapabilities = [
         browserVersion: '35.0',
         os: 'OS X',
         osVersion: 'Mavericks'
-    })*/
+    })
 ];
 
 module.exports.config = config;

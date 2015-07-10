@@ -62,6 +62,7 @@ gulp.task('watch', ['compile'], function() {
 
 gulp.task('serve', ['default'], function(){
     g.connect.server({
+        hostname: '0.0.0.0',
         port: 8088,
         root: ['test', '.']
     });
