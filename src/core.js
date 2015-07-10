@@ -99,8 +99,7 @@ function dijalogFactory() {
                     type: 'submit',
                     className: 'dijalog-button-primary'
                 }
-            ],
-            focusFirstInput: false
+            ]
         },
 
         defaultConfirmOptions: {
@@ -344,7 +343,7 @@ function dijalogFactory() {
 
             if(options.focusFirstInput) {
                 options.afterOpen = function(dialog) {
-                    dialog.contentElement
+                    var firstInput = dialog.contentElement
                         .querySelector(
                             'button[type="submit"], ' +
                             'button[type="button"], ' +
@@ -363,8 +362,11 @@ function dijalogFactory() {
                             'input[type="time"], ' +
                             'input[type="url"], ' +
                             'input[type="week"]'
-                        )
-                        .focus();
+                        );
+
+                    if(firstInput) {
+                        firstInput.focus();
+                    }
 
                     if (afterOpen) {
                         afterOpen(dialog);
