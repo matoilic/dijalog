@@ -2,9 +2,7 @@
 @import "keyframes";
 
 @include keyframes-dijalog-flyin;
-
 @include keyframes-dijalog-flyout;
-
 @include keyframes-dijalog-pulse;
 
 $blue: #3288e6;
@@ -74,11 +72,13 @@ $blue: #3288e6;
             background: transparent;
         }
 
-        &:hover:before, &:active:before {
+        &:hover:before,
+        &:active:before {
             color: #777777;
             background: #e0e0e0;
         }
     }
+
     .dijalog-form {
         .dijalog-message {
             margin-bottom: 0.5em;

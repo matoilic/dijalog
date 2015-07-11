@@ -1,0 +1,152 @@
+@import "mixins";
+@import "keyframes";
+
+@include keyframes-dijalog-dropin;
+@include keyframes-dijalog-dropout;
+@include keyframes-dijalog-pulse;
+
+$blue: #3288e6;
+
+.dijalog.dijalog-theme-top {
+  &.dijalog-closing .dijalog-content,
+  &.dijalog-hiding .dijalog-content {
+    animation: dijalog-dropout 0.5s;
+  }
+
+  .dijalog-content.dijalog-visible {
+    animation: dijalog-dropin 0.5s;
+  }
+
+  .dijalog-content {
+    border-radius: 0 0 5px 5px;
+    font-family: "Helvetica Neue", sans-serif;
+    background: #f0f0f0;
+    color: #444444;
+    padding: 1em;
+    position: relative;
+    margin: 0 auto;
+    max-width: 100%;
+    width: 450px;
+    font-size: 1.1em;
+    line-height: 1.5em;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    ul,
+    li {
+      color: inherit;
+    }
+  }
+
+  .dijalog-close {
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+
+    &:before {
+      border-radius: 3px;
+      position: absolute;
+      content: "\00D7";
+      font-size: 26px;
+      font-weight: normal;
+      line-height: 31px;
+      height: 30px;
+      width: 30px;
+      text-align: center;
+      top: 3px;
+      right: 3px;
+      color: #bbbbbb;
+      background: transparent;
+    }
+
+    &:hover:before,
+    &:active:before {
+      color: #777777;
+      background: #e0e0e0;
+    }
+  }
+
+  .dijalog-form {
+    .dijalog-message {
+      margin-bottom: 0.5em;
+    }
+
+    .dijalog-input {
+      margin-bottom: 1em;
+
+      textarea,
+      input[type="date"],
+      input[type="datetime"],
+      input[type="datetime-local"],
+      input[type="email"],
+      input[type="month"],
+      input[type="number"],
+      input[type="password"],
+      input[type="search"],
+      input[type="tel"],
+      input[type="text"],
+      input[type="time"],
+      input[type="url"],
+      input[type="week"] {
+        border-radius: 3px;
+        background: white;
+        width: 100%;
+        padding: 0.25em 0.67em;
+        border: 0;
+        font-family: inherit;
+        font-weight: inherit;
+        font-size: inherit;
+        min-height: 2.5em;
+        margin: 0 0 0.25em;
+
+        &:focus {
+          box-shadow: inset 0 0 0 2px lighten($blue, 20%);
+          outline: none;
+        }
+      }
+    }
+
+    .dijalog-buttons {
+      @include dijalog-clearfix;
+    }
+  }
+
+  .dijalog-button {
+    border-radius: 3px;
+    border: 0;
+    float: right;
+    margin: 0 0 0 0.5em;
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.8em;
+    line-height: 1em;
+    padding: 0.75em 2em;
+
+    &.dijalog-last {
+      margin-left: 0;
+    }
+
+    &:focus {
+      animation: dijalog-pulse 1.1s infinite;
+      outline: none;
+    }
+
+    &.dijalog-button-primary {
+      background: $blue;
+      color: white;
+    }
+
+    &.dijalog-button-secondary {
+      background: #e0e0e0;
+      color: #777777;
+    }
+  }
+}
