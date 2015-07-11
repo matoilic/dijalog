@@ -2,7 +2,7 @@
 
 Dijalog is a reimplementation of [HubSpot's vex](https://github.com/HubSpot/vex) as standalone micro library. I've been using vex extensively for quite some time, but it's dependency on jQuery has become a burden. Thus, I decided to reimplement it as standalone library in vanilla JavaScript.
 
-Dijalog is a modern dialog library which is highly configurable and easily stylable. It has a tiny footprint, a small and simple API and works on mobile devices.
+Dijalog is a modern dialog library which is highly configurable and easily styleable. It has a tiny footprint, a small and simple API and works on mobile devices.
 
 ## Acknowledgements
 
