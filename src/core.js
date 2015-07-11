@@ -272,8 +272,8 @@ function dijalogFactory() {
             }
 
             options.contentElement = content;
-            options.id = dijalog.dialogs.length;
             dijalog.dialogs.push(options);
+            options.id = dijalog.dialogs.length;
 
             currentDijalog = options;
 
