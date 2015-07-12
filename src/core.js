@@ -475,6 +475,21 @@ function dijalogFactory() {
         }
     };
 
+    dijalog.helpers = {
+        assign: assign,
+        on: on,
+        once: once,
+        trigger: trigger,
+        serializeForm: serializeForm,
+        css: css,
+        addClass: addClass,
+        removeClass: removeClass,
+        append: append,
+        createElement: createElement,
+        noop: noop,
+        last: last
+    };
+
     dijalog.setupBodyClassName();
 
     window.addEventListener('keyup', function(event) {
