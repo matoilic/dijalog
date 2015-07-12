@@ -11,7 +11,7 @@ A big "THANK YOU" to the HubSpot team for vex and all their other contributions 
 ## Features
 
 - Drop-in replacement for `alert`, `confirm`, and `prompt`.
-- Easily configurable animations which are smooth as butter.
+- Easily configurable animations which are smooth as f***.
 - Small (`3kb` minified and gzipped) and no dependencies.
 - Looks and behaves great on mobile devices.
 - Open multiple dialogs at once and close them individually or all at once.

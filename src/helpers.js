@@ -132,16 +132,18 @@ function once(elem, events, callback) {
     });
 }
 
-function trigger(elem, event, data) {
+function trigger(elem, eventName, data) {
+    var event;
+
     try {
-        event = new CustomEvent(event, {
+        event = new CustomEvent(eventName, {
             bubbles: true,
             cancelable: false,
             detail: data
         });
     } catch(e) {
         event = document.createEvent('CustomEvent');
-        event.initCustomEvent(event, true, true, data);
+        event.initCustomEvent(eventName, true, true, data);
     }
 
     elem.dispatchEvent(event);
