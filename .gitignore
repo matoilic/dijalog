@@ -1,5 +1,4 @@
 .idea
 css
-dist
 node_modules
 test/config/browserstack.js
