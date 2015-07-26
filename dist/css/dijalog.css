@@ -1,0 +1,183 @@
+@-webkit-keyframes dijalog-fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes dijalog-fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes dijalog-fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes dijalog-fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes dijalog-rotation {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
+@keyframes dijalog-rotation {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
+.dijalog,
+.dijalog *,
+.dijalog *:before,
+.dijalog *:after {
+  box-sizing: border-box;
+}
+
+.dijalog {
+  position: fixed;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 1111;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.dijalog-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll;
+}
+
+.dijalog-overlay {
+  -webkit-animation: dijalog-fadein 0.5s;
+          animation: dijalog-fadein 0.5s;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.4);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.dijalog.dijalog-closing .dijalog-overlay {
+  -webkit-animation: dijalog-fadeout 0.5s;
+          animation: dijalog-fadeout 0.5s;
+}
+
+.dijalog-content {
+  background: white;
+}
+
+.dijalog.dijalog-closing .dijalog-content,
+.dijalog.dijalog-hiding .dijalog-content {
+  -webkit-animation: dijalog-fadeout 0.5s;
+          animation: dijalog-fadeout 0.5s;
+}
+
+.dijalog-content.dijalog-hidden {
+  display: none;
+}
+
+.dijalog-content.dijalog-visible {
+  -webkit-animation: dijalog-fadein 0.5s;
+          animation: dijalog-fadein 0.5s;
+}
+
+.dijalog-close:before {
+  font-family: Arial, sans-serif;
+  content: "\00D7";
+}
+
+.dijalog-form {
+  margin: 0;
+}
+
+.dijalog-button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+}
+
+.dijalog-spinner {
+  border: 3px solid #000;
+  border-radius: 50%;
+  height: 11em;
+  width: 11em;
+  -webkit-animation: dijalog-rotation 1.8s infinite linear;
+          animation: dijalog-rotation 1.8s infinite linear;
+  border-left-color: transparent;
+  margin: 50px auto;
+  position: relative;
+  will-change: transform;
+}
+
+.dijalog-spinner:before {
+  border: 3px solid #000;
+  border-radius: 50%;
+  height: 9em;
+  width: 9em;
+  -webkit-animation: dijalog-rotation 1.8s infinite linear;
+          animation: dijalog-rotation 1.8s infinite linear;
+  border-bottom-color: transparent;
+  content: "";
+  left: 1em;
+  position: absolute;
+  top: 1em;
+}
+
+.dijalog-spinner:after {
+  border: 3px solid #000;
+  border-radius: 50%;
+  height: 7em;
+  width: 7em;
+  -webkit-animation: dijalog-rotation 1.8s infinite linear;
+          animation: dijalog-rotation 1.8s infinite linear;
+  border-right-color: transparent;
+  content: "";
+  left: 2em;
+  position: absolute;
+  top: 2em;
+}
+
+body.dijalog-open {
+  overflow: hidden;
+}
+
+/*# sourceMappingURL=dijalog.css.map */

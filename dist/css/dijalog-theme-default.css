@@ -1,0 +1,247 @@
+@-webkit-keyframes dijalog-flyin {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-40px);
+            transform: translateY(-40px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+}
+
+@keyframes dijalog-flyin {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-40px);
+            transform: translateY(-40px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes dijalog-flyout {
+  0% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(-40px);
+            transform: translateY(-40px);
+  }
+}
+
+@keyframes dijalog-flyout {
+  0% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(-40px);
+            transform: translateY(-40px);
+  }
+}
+
+@-webkit-keyframes dijalog-pulse {
+  0% {
+    box-shadow: inset 0 0 0 300px transparent;
+  }
+  70% {
+    box-shadow: inset 0 0 0 300px rgba(255, 255, 255, 0.25);
+  }
+  100% {
+    box-shadow: inset 0 0 0 300px transparent;
+  }
+}
+
+@keyframes dijalog-pulse {
+  0% {
+    box-shadow: inset 0 0 0 300px transparent;
+  }
+  70% {
+    box-shadow: inset 0 0 0 300px rgba(255, 255, 255, 0.25);
+  }
+  100% {
+    box-shadow: inset 0 0 0 300px transparent;
+  }
+}
+
+.dijalog.dijalog-theme-default {
+  padding-top: 160px;
+  padding-bottom: 160px;
+}
+
+.dijalog.dijalog-theme-default.dijalog-closing .dijalog-content,
+.dijalog.dijalog-theme-default.dijalog-hiding .dijalog-content {
+  -webkit-animation: dijalog-flyout 0.5s;
+          animation: dijalog-flyout 0.5s;
+}
+
+.dijalog.dijalog-theme-default .dijalog-content.dijalog-visible {
+  -webkit-animation: dijalog-flyin 0.5s;
+          animation: dijalog-flyin 0.5s;
+}
+
+.dijalog.dijalog-theme-default .dijalog-content {
+  border-radius: 5px;
+  font-family: "Helvetica Neue", sans-serif;
+  background: #f0f0f0;
+  color: #444444;
+  padding: 1em;
+  position: relative;
+  margin: 0 auto;
+  max-width: 100%;
+  width: 450px;
+  font-size: 1.1em;
+  line-height: 1.5em;
+}
+
+.dijalog.dijalog-theme-default .dijalog-content h1,
+.dijalog.dijalog-theme-default .dijalog-content h2,
+.dijalog.dijalog-theme-default .dijalog-content h3,
+.dijalog.dijalog-theme-default .dijalog-content h4,
+.dijalog.dijalog-theme-default .dijalog-content h5,
+.dijalog.dijalog-theme-default .dijalog-content h6,
+.dijalog.dijalog-theme-default .dijalog-content p,
+.dijalog.dijalog-theme-default .dijalog-content ul,
+.dijalog.dijalog-theme-default .dijalog-content li {
+  color: inherit;
+}
+
+.dijalog.dijalog-theme-default .dijalog-close {
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+
+.dijalog.dijalog-theme-default .dijalog-close:before {
+  border-radius: 3px;
+  position: absolute;
+  content: "\00D7";
+  font-size: 26px;
+  font-weight: normal;
+  line-height: 31px;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  top: 3px;
+  right: 3px;
+  color: #bbbbbb;
+  background: transparent;
+}
+
+.dijalog.dijalog-theme-default .dijalog-close:hover:before,
+.dijalog.dijalog-theme-default .dijalog-close:active:before {
+  color: #777777;
+  background: #e0e0e0;
+}
+
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-message {
+  margin-bottom: 0.5em;
+}
+
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input {
+  margin-bottom: 1em;
+}
+
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input textarea,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="date"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="datetime"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="datetime-local"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="email"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="month"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="number"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="password"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="search"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="tel"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="text"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="time"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="url"],
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="week"] {
+  border-radius: 3px;
+  background: white;
+  width: 100%;
+  padding: 0.25em 0.67em;
+  border: 0;
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  min-height: 2.5em;
+  margin: 0 0 0.25em;
+}
+
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input textarea:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="date"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="datetime"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="datetime-local"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="email"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="month"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="number"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="password"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="search"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="tel"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="text"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="time"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="url"]:focus,
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-input input[type="week"]:focus {
+  box-shadow: inset 0 0 0 2px #8dbdf1;
+  outline: none;
+}
+
+.dijalog.dijalog-theme-default .dijalog-form .dijalog-buttons:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.dijalog.dijalog-theme-default .dijalog-button {
+  border-radius: 3px;
+  border: 0;
+  float: right;
+  margin: 0 0 0 0.5em;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.8em;
+  line-height: 1em;
+  padding: 0.75em 2em;
+}
+
+.dijalog.dijalog-theme-default .dijalog-button.dijalog-last {
+  margin-left: 0;
+}
+
+.dijalog.dijalog-theme-default .dijalog-button:focus {
+  -webkit-animation: dijalog-pulse 1.1s infinite;
+          animation: dijalog-pulse 1.1s infinite;
+  outline: none;
+}
+
+@media (max-width: 568px) {
+  .dijalog.dijalog-theme-default .dijalog-button:focus {
+    -webkit-animation: none;
+            animation: none;
+  }
+}
+
+.dijalog.dijalog-theme-default .dijalog-button.dijalog-button-primary {
+  background: #3288e6;
+  color: white;
+}
+
+.dijalog.dijalog-theme-default .dijalog-button.dijalog-button-secondary {
+  background: #e0e0e0;
+  color: #777777;
+}
+
+/*# sourceMappingURL=dijalog-theme-default.css.map */

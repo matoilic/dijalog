@@ -14,7 +14,7 @@ gulp.task('compile-stylesheets', function() {
         }))
         .pipe(g.autoprefixer())
         .pipe(g.sourcemaps.write('.'))
-        .pipe(gulp.dest('css'));
+        .pipe(gulp.dest('dist/css'));
 });
 
 gulp.task('compile', function() {
